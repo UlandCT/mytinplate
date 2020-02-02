@@ -15,13 +15,19 @@ def index_views(request):
     return HttpResponse( "welcome to mytinplate view!")
 
 
-def queryList(request):
+def queryResultList(request):
     print("正在查询...")
     if request.method == 'GET':
-        timeStamp = dt.datetime.now().strftime("%y-%m-%d")
         try:
-            res = Ouyeel.objects.filter(businessTimes=timeStamp,productCode=duxi,onBusiness="1")
-            # js = json.dumps(user)
+            param = request.GET.get("parameters")
+            param = json.loads(json.dumps(eval(param)))
+        except Exception as e:
+            print("Get err :",e)
+            return HttpResponse("paramError")
+
+        try:
+
+            res = queryResult(param)
             resLst = []
             dlst = []
             for i in res:
@@ -29,7 +35,7 @@ def queryList(request):
                 # dic = json.dumps(dic)
                 resLst.append(dic)
             # querydic = serializers.serialize('json',res)
-            print(len(resLst))
+            print("记录条数：",len(resLst))
             querydic = json.dumps(resLst)
             return HttpResponse(querydic)
         except Exception as e:
@@ -45,116 +51,17 @@ def queryList(request):
             return HttpResponse(msg)
     return HttpResponse('你发过来的东西是什么？')
 
-# 退出登录函数
-def logout(request):
+def queryResult(param):
+    timeStamp = dt.datetime.now().strftime("%y-%m-%d")
+    if param["sourceCode"]:
+        res = Ouyeel.objects.filter(businessTimes=timeStamp, productCode=duxi, onBusiness="1", )
+    if not res:
+        timeStamp = (dt.datetime.now() - dt.timedelta(days=1)).strftime("%y-%m-%d")
+        res = Ouyeel.objects.filter(businessTimes=timeStamp, productCode=duxi, onBusiness="1", )
 
-    if 'uname' in request.session:
-        print(request.session['uname'])
-        del request.session['uname']
-        print('已经删除uname')
-    if 'uid' in request.session:
-        del request.session['uid']
-        print('已经删除uid')
-    return HttpResponse('deleted')
+    return res
 
-# 判断是否登录的函数
-def islogged(request):
-    print("进入islogged")
-    # 若seesion中有信息 ，则 回主页
-    if 'uname' in request.session and 'uid' in request.session:
-        print(request.session)
-        uname = request.session.get('uname')
-        uid = request.session.get('uid')
-        print(uname)
-        print(uid)
 
-        return HttpResponse(uname)
-    # else:
-    #     # 若cookie中有信息# 也回主页
-    #     if 'uname' in request.COOKIES and 'uid' in request.COOKIES:
-    #         name = json.loads(request.COOKIES['uname'])
-    #         print('cookie:',request.COOKIES['uname'])
-    #         return redirect('/index/')
-    print('并没有session在')
-    return HttpResponse(False)
-
-def islogged_views(request):
-    print("进入islogged——views")
-    # 若seesion中有信息 ，则 回主页
-    if 'uname' in request.session and 'uid' in request.session:
-        print(request.session)
-        uname = request.session.get('uname')
-        uid = request.session.get('uid')
-        print(uname)
-        print(uid)
-
-        return True
-    print('并没有session在')
-    return False
-
-def create_views(request):
-    # if request.method == 'GET':
-    #     return render(request,'create.html')
-    # uname = request.POST['uname']
-    # upwd = request.POST['upwd']
-    return HttpResponse(request, 'create.html')
-
-# 判断提交的表单是否符合要求
-# def login_form(request):
-#     # 1、手动接受提交的数据
-#     uname = request.POST['uname']
-#     upwd = request.POST['upwd']
-#     # print(uname)
-#
-#     # 2、自动接受提交的数据
-#     form1 = Login(request.POST)
-#     # print(form1)
-#     # 2.1通过forms.Form的构造，接受request.POST
-#     # 2.2is_valid()
-#     if not form1.is_valid():
-#         errmsg = '输入有误！'
-#         # return errmsg
-#         return render(request, 'login.html', locals())
-#         # 2.3 form.cleaned_data
-#     else:
-#         cd = form1.cleaned_data
-#         cur_name = User.objects.filter(uname=cd['uname'], upwd=cd['upwd'])
-#         # print(cd)
-#         if cur_name:
-#             # 将登陆信息存入服务器的session中去
-#             request.session['uid'] = cur_name[0].id
-#             request.session['uname'] = uname
-#             # 将要返回的内容放入一个变量中，并用该变量设置cookie
-#             # resp = render(request, 'index.html', locals())
-#             # uname = uname.encode('utf-8').decode('latin-1')
-#             resp = redirect('/video/index/',locals())
-#             # 用json存取值 先import json
-#             uname = json.dumps(uname)
-#             # 若要取值，则用json.loads(uname)
-#             # uname = request.COOKIES['uname']
-#             # uname = json.loads(uname)
-#             if 'isSaved' in request.POST:
-#                 uid = cur_name[0].id
-#                 resp.set_cookie('uname', uname, 60 * 60 * 24 * 366)
-#                 resp.set_cookie('uid', uid, 3600 * 24 * 366)
-#             session = request.session
-#             print(session)
-#             return resp
-#         else:
-#             errmsg = '用户名或者密码错误，请重新输入!'
-#             return render(request, 'login.html', locals())
-
-# def get_views(request):
-#     print(request.GET)
-#     get = request.GET
-#     # request.GET是个字典
-#     # uname = request.GET['uname']
-#     # upwd = request.GET['upwd']
-#     # uhobby = request.GET['uhobby']
-#     # print(request.GET.uhobby[0])
-#     # print(uname,upwd,uhobby)
-#     # return HttpResponse('用户名:'+uname+',密码：'+upwd+',爱好：'+uhobby)
-#     return render(request,'02_form.html',locals())
 
 def getDataToDb(request):
     #TODO monitor requests
@@ -226,6 +133,54 @@ def updateProduct(obj,i):
         obj.businessTimes = timeStamp
     obj.save()
 
+# 退出登录函数
+def logout(request):
+
+    if 'uname' in request.session:
+        print(request.session['uname'])
+        del request.session['uname']
+        print('已经删除uname')
+    if 'uid' in request.session:
+        del request.session['uid']
+        print('已经删除uid')
+    return HttpResponse('deleted')
+
+# 判断是否登录的函数
+def islogged(request):
+    print("进入islogged")
+    # 若seesion中有信息 ，则 回主页
+    if 'uname' in request.session and 'uid' in request.session:
+        print(request.session)
+        uname = request.session.get('uname')
+        uid = request.session.get('uid')
+        print(uname)
+        print(uid)
+
+        return HttpResponse(uname)
+    # else:
+    #     # 若cookie中有信息# 也回主页
+    #     if 'uname' in request.COOKIES and 'uid' in request.COOKIES:
+    #         name = json.loads(request.COOKIES['uname'])
+    #         print('cookie:',request.COOKIES['uname'])
+    #         return redirect('/index/')
+    print('并没有session在')
+    return HttpResponse(False)
+
+def islogged_views(request):
+    print("进入islogged——views")
+    # 若seesion中有信息 ，则 回主页
+    if 'uname' in request.session and 'uid' in request.session:
+        print(request.session)
+        uname = request.session.get('uname')
+        uid = request.session.get('uid')
+        print(uname)
+        print(uid)
+
+        return True
+    print('并没有session在')
+    return False
+
+
 # 演示cookie操作
 # def cookie1_views(request):
 #     # resp = HttpResponse('添加cookie成功')
@@ -263,3 +218,60 @@ def updateProduct(obj,i):
 #
 #     else:
 #         return login_form(request)
+
+# 判断提交的表单是否符合要求
+# def login_form(request):
+#     # 1、手动接受提交的数据
+#     uname = request.POST['uname']
+#     upwd = request.POST['upwd']
+#     # print(uname)
+#
+#     # 2、自动接受提交的数据
+#     form1 = Login(request.POST)
+#     # print(form1)
+#     # 2.1通过forms.Form的构造，接受request.POST
+#     # 2.2is_valid()
+#     if not form1.is_valid():
+#         errmsg = '输入有误！'
+#         # return errmsg
+#         return render(request, 'login.html', locals())
+#         # 2.3 form.cleaned_data
+#     else:
+#         cd = form1.cleaned_data
+#         cur_name = User.objects.filter(uname=cd['uname'], upwd=cd['upwd'])
+#         # print(cd)
+#         if cur_name:
+#             # 将登陆信息存入服务器的session中去
+#             request.session['uid'] = cur_name[0].id
+#             request.session['uname'] = uname
+#             # 将要返回的内容放入一个变量中，并用该变量设置cookie
+#             # resp = render(request, 'index.html', locals())
+#             # uname = uname.encode('utf-8').decode('latin-1')
+#             resp = redirect('/video/index/',locals())
+#             # 用json存取值 先import json
+#             uname = json.dumps(uname)
+#             # 若要取值，则用json.loads(uname)
+#             # uname = request.COOKIES['uname']
+#             # uname = json.loads(uname)
+#             if 'isSaved' in request.POST:
+#                 uid = cur_name[0].id
+#                 resp.set_cookie('uname', uname, 60 * 60 * 24 * 366)
+#                 resp.set_cookie('uid', uid, 3600 * 24 * 366)
+#             session = request.session
+#             print(session)
+#             return resp
+#         else:
+#             errmsg = '用户名或者密码错误，请重新输入!'
+#             return render(request, 'login.html', locals())
+
+# def get_views(request):
+#     print(request.GET)
+#     get = request.GET
+#     # request.GET是个字典
+#     # uname = request.GET['uname']
+#     # upwd = request.GET['upwd']
+#     # uhobby = request.GET['uhobby']
+#     # print(request.GET.uhobby[0])
+#     # print(uname,upwd,uhobby)
+#     # return HttpResponse('用户名:'+uname+',密码：'+upwd+',爱好：'+uhobby)
+#     return render(request,'02_form.html',locals())

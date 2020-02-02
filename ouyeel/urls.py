@@ -7,7 +7,7 @@ urlpatterns = [
     url(r'^$',index_views),
     # url(r'^index/$',index_views1),
     # url(r'^03_form/$',form_views),
-    url(r'^queryList$',queryList,),
+    url(r'^queryResultList$',queryResultList,),
     url(r'^getDataToDb$',getDataToDb),
 
 
