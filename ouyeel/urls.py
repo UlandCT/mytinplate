@@ -8,7 +8,7 @@ urlpatterns = [
     # url(r'^index/$',index_views1),
     # url(r'^03_form/$',form_views),
     url(r'^queryResultList$',queryResultList,),
-    url(r'^getDataToDb$',getDataToDb),
+    url(r'^getDataToOyDb$',getDataToOyDb),
 
 
 

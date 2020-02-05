@@ -1,0 +1,26 @@
+[sourceCode]
+1 #本地资源
+2 #友商资源
+3 #其他资源
+
+[productCode]
+0 #All
+1 #镀锡
+2 #镀铬
+3 #镀铬覆膜
+
+
+[resultCode]
+successCode = 0 #成功返回
+nullCode = 1  #查询为空
+errCode = 2  #参数错误
+
+[interface]
+name:/queryResultList
+Query String Parameters :
+    {"parameters":{
+            'sourceCode':'2',
+            'productCode':'1',
+        }
+    }
+Form Data : 无

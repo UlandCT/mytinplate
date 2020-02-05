@@ -11,7 +11,6 @@ import datetime as dt
 
 # 后端根目录视图函数
 def index_views(request):
-
     return HttpResponse( "welcome to mytinplate view!")
 
 
@@ -21,49 +20,74 @@ def queryResultList(request):
         try:
             param = request.GET.get("parameters")
             param = json.loads(json.dumps(eval(param)))
+            if "sourceCode" not in param.keys() or "productCode" not in param.keys():
+                return HttpResponse("paramError")
         except Exception as e:
             print("Get err :",e)
-            return HttpResponse("paramError")
+            return HttpResponse(json.dumps(errCode))
 
         try:
-
             res = queryResult(param)
+            if not res:
+                return HttpResponse(json.dumps(nullCode))
             resLst = []
-            dlst = []
+
             for i in res:
                 dic = i.to_small_dic()
                 # dic = json.dumps(dic)
                 resLst.append(dic)
             # querydic = serializers.serialize('json',res)
             print("记录条数：",len(resLst))
-            querydic = json.dumps(resLst)
-            return HttpResponse(querydic)
+            successCode["resultList"] = resLst
+            return HttpResponse(json.dumps(successCode))
         except Exception as e:
             print(e)
-            return HttpResponse("empty!")
+            return HttpResponse(json.dumps(errCode))
+
+def getCode(param):
+    if param["sourceCode"] == '2':
+        modelName = oy
+    elif param["sourceCode"] == '1':
+            modelName = mt
+    elif param["sourceCode"] == '3':
+        modelName = ot
     else:
-        form = request.POST
-        if 'uname' in form and 'uage' in form:
-            uname = form['uname']
-            uage = form['uage']
-            msg = '欢迎：%s的%s！！'%(uage, uname)
-            print(msg)
-            return HttpResponse(msg)
-    return HttpResponse('你发过来的东西是什么？')
+        modelName = None
+
+    if param["productCode"] == '0':
+        productCode = "ALL"
+    elif param["productCode"] == '1':
+        productCode = duxi
+    elif param["productCode"] == '2':
+        productCode = duge
+    elif param["productCode"] == '3':
+        productCode = dugefumo
+    else:
+        productCode = None
+    return modelName,productCode
 
 def queryResult(param):
+    modelName, productCode = getCode(param)
     timeStamp = dt.datetime.now().strftime("%y-%m-%d")
-    if param["sourceCode"]:
-        res = Ouyeel.objects.filter(businessTimes=timeStamp, productCode=duxi, onBusiness="1", )
-    if not res:
-        timeStamp = (dt.datetime.now() - dt.timedelta(days=1)).strftime("%y-%m-%d")
-        res = Ouyeel.objects.filter(businessTimes=timeStamp, productCode=duxi, onBusiness="1", )
 
-    return res
+    if modelName != None and productCode != None:
+        if productCode != "ALL":
+            res = eval(modelName).objects.filter(businessTimes=timeStamp, productCode=productCode, onBusiness="1", )
+            if not res:
+                timeStamp = (dt.datetime.now() - dt.timedelta(days=1)).strftime("%y-%m-%d")
+                res = eval(modelName).objects.filter(businessTimes=timeStamp, productCode=productCode, onBusiness="1", )
+        else:
+            res = eval(modelName).objects.filter(businessTimes=timeStamp, onBusiness="1", )
+            if not res:
+                timeStamp = (dt.datetime.now() - dt.timedelta(days=1)).strftime("%y-%m-%d")
+                res = eval(modelName).objects.filter(businessTimes=timeStamp, onBusiness="1", )
+
+        return res
 
 
 
-def getDataToDb(request):
+
+def getDataToOyDb(request):
     #TODO monitor requests
     print("receiving data!")
     try:
@@ -72,24 +96,26 @@ def getDataToDb(request):
         updateNum = 0
         insertNum = 0
         for i in data:
-            if "packCode" in i:
-                try:
-                    # this record in db,then switch to next record
-                    obj = Ouyeel.objects.get(packCode=i["packCode"])
-                    if obj:
-                        # print(" record exists！")
-                        #TODO update the record
-                        updateProduct(obj,i)
-                        updateNum += 1
-                        continue
-                except Exception as e:
-                    # print("attribut Error",e)
-                    pass
-                timeStamp = dt.datetime.now().strftime("%y-%m-%d")
-                i["businessTimes"] = timeStamp
-                obj = Ouyeel(**i)
-                obj.save()
-                insertNum += 1
+            try:
+                if "packCode" in i:
+                    try:
+                        # this record in db,then switch to next record
+                        obj = Ouyeel.objects.get(packCode=i["packCode"])
+                        if obj:
+                            # print(" record exists！")
+                            updateProduct(obj,i)
+                            updateNum += 1
+                            continue
+                    except Exception as e:
+                        # print("attribut Error",e)
+                        pass
+                    timeStamp = dt.datetime.now().strftime("%y-%m-%d")
+                    i["businessTimes"] = timeStamp
+                    obj = Ouyeel(**i)
+                    obj.save()
+                    insertNum += 1
+            except Exception as e:
+                print("insertErr:",e,"\n","packCode:",i["packCode"])
         timeStamp2 = dt.datetime.now().strftime("%y-%m-%d %H:%M:%S")
         try:
             with open('./ouyeel/config/insertOuyeel.txt','at',encoding='utf8') as f:
@@ -101,7 +127,7 @@ def getDataToDb(request):
 
             pass
     except Exception as e:
-        print("InsertError",e)
+        print("InsertError",e,)
     return HttpResponse("")
 
 def updateProduct(obj,i):
