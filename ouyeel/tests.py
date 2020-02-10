@@ -4,19 +4,26 @@ import requests,urllib.parse,urllib.request,json,threading
 # Create your tests here.
 def main():
     headers = {}
-    url = "http://localhost:8000/queryResultList"
-    param = {"parameters":{
-        'sourceCode':'2',
-        'productCode':'3',
-    }}
+    # url = "http://localhost:8000/queryResultList"
+    url = "https://localhost:8000"
+    # param = {"parameters":{
+    #     'sourceCode':'2',
+    #     'productCode':'1',
+    # }}
     # param = {"param":[1,2,3,4]}
-    # param = {"param":"this is param!"}
-    # res = requests.get(url=url,params=param)
-    param = urllib.parse.urlencode(param)
-    url = url + "?" +param
-    request = urllib.request.Request(url,headers=headers)
-    res1 = urllib.request.urlopen(request)
-    print(res1.read())
+    param = {"param":"this is param!"}
+    # param = urllib.parse.urlencode(param)
+    # url = url + "?" +param
+    # request = urllib.request.Request(url,headers=headers)
+    # res1 = urllib.request.urlopen(request)
+    res = requests.get(url=url,headers=headers,data=param)
+    print(res.text)
+    res = json.loads(res.text)
+    resList = []
+    for i in res["resultList"]:
+        if i["productTypeCode"]== "TL60":
+            resList.append(i)
+    print(1111)
 
 def jsonstr():
     def act1():
@@ -46,5 +53,7 @@ def jsonstr():
 
 
 if __name__ == "__main__":
-    # main()
-    jsonstr()
+    main()
+    # jsonstr()
+    import os
+    print(111)

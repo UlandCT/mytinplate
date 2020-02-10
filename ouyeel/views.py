@@ -11,6 +11,17 @@ import datetime as dt
 
 # 后端根目录视图函数
 def index_views(request):
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
+        ip = request.META['HTTP_X_FORWARDED_FOR']
+        print("HTTP_X_FORWARDED_FOR:",ip)
+    if "HTTP_VIA" in request.META:
+        ip = request.META['HTTP_VIA']
+        print("HTTP_VIA:",ip)
+    if "REMOTE_ADDR" in request.META:
+        ip = request.META['REMOTE_ADDR']
+        print("REMOTE_ADDR:",ip)
+
+
     return HttpResponse( "welcome to mytinplate view!")
 
 
@@ -37,7 +48,7 @@ def queryResultList(request):
                 # dic = json.dumps(dic)
                 resLst.append(dic)
             # querydic = serializers.serialize('json',res)
-            print("记录条数：",len(resLst))
+            print("记录条数：", len(resLst))
             successCode["resultList"] = resLst
             return HttpResponse(json.dumps(successCode))
         except Exception as e:
@@ -84,8 +95,25 @@ def queryResult(param):
 
         return res
 
-
-
+def reportB_grade(request):
+    print("begin grab!!!")
+    try:
+        timeStamp = dt.datetime.now().strftime("%y-%m-%d")
+        modiTime = dt.datetime.hour
+        res = Ouyeel.objects.filter(businessTimes=timeStamp, qualityGrade__contains="B", onBusiness="1", modiDate=str(modiTime))
+        if res:
+            resLst = []
+            for i in res:
+                dic = i.to_little_dic()
+                # dic = json.dumps(dic)
+                resLst.append(dic)
+            # querydic = serializers.serialize('json',res)
+            print("记录条数：", len(resLst))
+            successCode["resultList"] = resLst
+            return HttpResponse(json.dumps(successCode))
+    except Exception as e:
+        print("filterData error!",e)
+    return HttpResponse(json.dumps(nullCode))
 
 def getDataToOyDb(request):
     #TODO monitor requests
@@ -103,12 +131,12 @@ def getDataToOyDb(request):
                         obj = Ouyeel.objects.get(packCode=i["packCode"])
                         if obj:
                             # print(" record exists！")
-                            updateProduct(obj,i)
-                            updateNum += 1
+                            updateNum = updateProduct(obj,i,updateNum)
+
                             continue
                     except Exception as e:
-                        # print("attribut Error",e)
-                        pass
+                        print("updating data Error",e)
+                        continue
                     timeStamp = dt.datetime.now().strftime("%y-%m-%d")
                     i["businessTimes"] = timeStamp
                     obj = Ouyeel(**i)
@@ -116,6 +144,7 @@ def getDataToOyDb(request):
                     insertNum += 1
             except Exception as e:
                 print("insertErr:",e,"\n","packCode:",i["packCode"])
+
         timeStamp2 = dt.datetime.now().strftime("%y-%m-%d %H:%M:%S")
         try:
             with open('./ouyeel/config/insertOuyeel.txt','at',encoding='utf8') as f:
@@ -124,40 +153,56 @@ def getDataToOyDb(request):
                 if updateNum != 0:
                     f.write("%s --update records amounts %d \n"%(timeStamp2,updateNum))
         except Exception as e:
-
             pass
+        return HttpResponse("data has been saved!")
     except Exception as e:
         print("InsertError",e,)
-    return HttpResponse("")
+    return HttpResponse("you got 404!")
 
-def updateProduct(obj,i):
-
-    if obj.modiDate != i["modiDate"]:
-        obj.modiDate = i["modiDate"]
+def updateProduct(obj,i,updateNum):
+    num = 0
+    modiTime = dt.datetime.now().hour
+    if obj.modiDate != str(modiTime):
+        obj.modiDate = modiTime
+        # num += 1
     if obj.publishDate != i["publishDate"]:
         obj.publishDate = i["publishDate"]
-    if obj.publishPrice != i["publishPrice"]:
+        num += 1
+    if int(obj.publishPrice) != i["publishPrice"]:
         obj.publishPrice = i["publishPrice"]
-    if obj.basicPrice != i["basicPrice"]:
+        num += 1
+    if int(obj.basicPrice) != i["basicPrice"]:
         obj.basicPrice = i["basicPrice"]
-    if obj.basicPrice != i["basicPrice"]:
+        num += 1
+    if int(obj.basicPrice) != i["basicPrice"]:
         obj.basicPrice = i["basicPrice"]
+        num += 1
     if obj.hasShop != i["hasShop"]:  # 是否竞拍
         obj.hasShop = i["hasShop"]
-    if obj.onBusiness != i["onBusiness"]:  # 是否正在营业
+        num += 1
+    if int(obj.onBusiness) != i["onBusiness"]:  # 是否正在营业
         obj.onBusiness = i["onBusiness"]
+        num += 1
     if obj.bidBeginDate != i["bidBeginDate"]:
         obj.bidBeginDate = i["bidBeginDate"]
+        num += 1
     if obj.bidEndDate != i["bidEndDate"]:
         obj.bidEndDate = i["bidEndDate"]
+        num += 1
     if obj.warehouseName != i["warehouseName"]:
         obj.warehouseName = i["warehouseName"]
+        num += 1
     if obj.storeCityName != i["storeCityName"]:
         obj.storeCityName = i["storeCityName"]
+        num += 1
     timeStamp = dt.datetime.now().strftime("%y-%m-%d")
     if obj.businessTimes != timeStamp:
         obj.businessTimes = timeStamp
-    obj.save()
+        num += 1
+    if num > 0:
+        obj.save()
+        updateNum += 1
+    return updateNum
 
 # 退出登录函数
 def logout(request):

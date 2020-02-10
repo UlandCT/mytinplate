@@ -372,7 +372,39 @@ class Ouyeel(models.Model):
             'weight': self.weight,
             'weightMethod': self.weightMethod,
            }
+        return goodsInfoes
 
+    def to_little_dic(self):
+        goodsInfoes = {
+            'modiDate':self.modiDate,
+            'balanceWeight': self.balanceWeight,
+            'weight': self.weight,
+            'publishDate': self.publishDate,
+            'publishPrice': self.publishPrice,
+            'basicPrice': self.basicPrice,
+            'manufactureName': self.manufactureName,
+            'packCode': self.packCode,
+            'ticketRate': self.ticketRate,
+            'shopSign': self.shopSign,
+            'spec': self.spec,
+            'specComment': self.specComment,
+            'specialComments': self.specialComments,
+            'productTypeCode': self.productTypeCode,
+            'productTypeName': self.productTypeName,
+            'qualityGrade': self.qualityGrade,
+            'qualityGradeName': self.qualityGradeName,
+            'productName': self.productName,
+            'warehouseName': self.warehouseName,
+            'spec1': self.spec1,
+            'spec2': self.spec2,
+            'spec3': self.spec3,
+            'spec4': self.spec4,
+            'spec5': self.spec5,
+            'spec6': self.spec6,
+            'storeCityName': self.storeCityName,
+            'techStandard': self.techStandard,
+
+           }
         return goodsInfoes
 
     class Meta:

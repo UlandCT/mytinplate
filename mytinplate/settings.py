@@ -25,9 +25,10 @@ SECRET_KEY = 'c16#y+ek59^ad*$vg9kd!v+kr(08ng9&w-lofdp-%$_qc46m4g'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1',"localhost"]
+ALLOWED_HOSTS = ['127.0.0.1',"1.1.1.1","localhost"]
 
-
+ALLOWED_IPS = ['125.127.0.0','localhost','*']
+DISALLOWED_IPS = []
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,11 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # "ouyeel.apps.ouyeelConfig",
     "ouyeel"
 ]
 
 MIDDLEWARE = [
+    'mytinplate.middleware.forbiddenIpMiddleware.ForbiddenIpMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
