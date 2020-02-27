@@ -23,11 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'c16#y+ek59^ad*$vg9kd!v+kr(08ng9&w-lofdp-%$_qc46m4g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1',"1.1.1.1","localhost"]
+ALLOWED_HOSTS = ["*"]
 
-ALLOWED_IPS = ['125.127.0.0','localhost','*']
+ALLOWED_IPS = ['125.127.0.0','localhost','127.0.0.1','115.204.0.0','115.196.0.0','58.101.0.0','112.10.0.0',]
 DISALLOWED_IPS = []
 # Application definition
 
@@ -57,9 +57,9 @@ ROOT_URLCONF = 'mytinplate.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
-        'APP_DIRS': True,
+        # 'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': ["mytinplate_fe/dist"],
+        'APP_DIRS': False,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -129,7 +129,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'),)
+STATIC_URL = '/assets/'
+STATIC_DIR = os.path.join(BASE_DIR,"mytinplate_fe/dist/assets/")
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR,"mytinplate_fe/dist/assets/"),
+)
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 60*60

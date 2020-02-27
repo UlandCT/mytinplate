@@ -1,9 +1,7 @@
 import json
-import re
 from .setting import *
-
-from django.core import serializers
-from django.shortcuts import render, redirect
+# from django.core import serializers
+# from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from ouyeel.models import *
 import datetime as dt
@@ -13,16 +11,15 @@ import datetime as dt
 def index_views(request):
     if 'HTTP_X_FORWARDED_FOR' in request.META:
         ip = request.META['HTTP_X_FORWARDED_FOR']
-        print("HTTP_X_FORWARDED_FOR:",ip)
+        print("HTTP_X_FORWARDED_FOR:", ip)
     if "HTTP_VIA" in request.META:
         ip = request.META['HTTP_VIA']
-        print("HTTP_VIA:",ip)
+        print("HTTP_VIA:", ip)
     if "REMOTE_ADDR" in request.META:
         ip = request.META['REMOTE_ADDR']
-        print("REMOTE_ADDR:",ip)
+        print("REMOTE_ADDR:", ip)
 
-
-    return HttpResponse( "welcome to mytinplate view!")
+    return HttpResponse("welcome to mytinplate view!")
 
 
 def queryResultList(request):
@@ -34,7 +31,7 @@ def queryResultList(request):
             if "sourceCode" not in param.keys() or "productCode" not in param.keys():
                 return HttpResponse("paramError")
         except Exception as e:
-            print("Get err :",e)
+            print("Get err :", e)
             return HttpResponse(json.dumps(errCode))
 
         try:
@@ -47,13 +44,14 @@ def queryResultList(request):
                 dic = i.to_small_dic()
                 # dic = json.dumps(dic)
                 resLst.append(dic)
-            # querydic = serializers.serialize('json',res)
+            # querydic = serializers.serialize('json', res)
             print("记录条数：", len(resLst))
             successCode["resultList"] = resLst
             return HttpResponse(json.dumps(successCode))
         except Exception as e:
             print(e)
             return HttpResponse(json.dumps(errCode))
+
 
 def getCode(param):
     if param["sourceCode"] == '2':
@@ -75,7 +73,8 @@ def getCode(param):
         productCode = dugefumo
     else:
         productCode = None
-    return modelName,productCode
+    return modelName, productCode
+
 
 def queryResult(param):
     modelName, productCode = getCode(param)
@@ -95,28 +94,31 @@ def queryResult(param):
 
         return res
 
+
 def reportB_grade(request):
     print("begin grab!!!")
     try:
         timeStamp = dt.datetime.now().strftime("%y-%m-%d")
-        modiTime = dt.datetime.hour
-        res = Ouyeel.objects.filter(businessTimes=timeStamp, qualityGrade__contains="B", onBusiness="1", modiDate=str(modiTime))
+        modiTime = dt.datetime.now().hour
+        res = Ouyeel.objects.filter(businessTimes=timeStamp, qualityGrade__contains="B", onBusiness='1', modiDate=modiTime)
         if res:
             resLst = []
             for i in res:
                 dic = i.to_little_dic()
                 # dic = json.dumps(dic)
                 resLst.append(dic)
-            # querydic = serializers.serialize('json',res)
+            # querydic = serializers.serialize('json', res)
             print("记录条数：", len(resLst))
             successCode["resultList"] = resLst
             return HttpResponse(json.dumps(successCode))
     except Exception as e:
-        print("filterData error!",e)
+        print("filterData error!", e)
+    print("空记录！")
     return HttpResponse(json.dumps(nullCode))
 
+
 def getDataToOyDb(request):
-    #TODO monitor requests
+    # TODO monitor requests
     print("receiving data!")
     try:
         data = request.body.decode('utf8')
@@ -127,44 +129,51 @@ def getDataToOyDb(request):
             try:
                 if "packCode" in i:
                     try:
-                        # this record in db,then switch to next record
+                        # this record in db, then switch to next record
                         obj = Ouyeel.objects.get(packCode=i["packCode"])
                         if obj:
                             # print(" record exists！")
-                            updateNum = updateProduct(obj,i,updateNum)
+                            updateNum = updateProduct(obj, i, updateNum)
 
                             continue
+                    except Ouyeel.DoesNotExist as e:
+                        # print("%s does not exists!"%i['packCode'])
+                        pass
                     except Exception as e:
-                        print("updating data Error",e)
+                        print("updating data Error", e)
                         continue
                     timeStamp = dt.datetime.now().strftime("%y-%m-%d")
+                    modiTime = dt.datetime.now().hour
                     i["businessTimes"] = timeStamp
+                    i["modiDate"] = modiTime
                     obj = Ouyeel(**i)
                     obj.save()
                     insertNum += 1
+
             except Exception as e:
-                print("insertErr:",e,"\n","packCode:",i["packCode"])
+                print("insertErr:", e, "\n", "packCode:", i["packCode"])
 
         timeStamp2 = dt.datetime.now().strftime("%y-%m-%d %H:%M:%S")
         try:
-            with open('./ouyeel/config/insertOuyeel.txt','at',encoding='utf8') as f:
+            with open('./ouyeel/config/insertOuyeel.txt', 'at', encoding='utf8') as f:
                 if insertNum != 0:
-                    f.write("%s --insert records amounts %d \n"%(timeStamp2,insertNum))
+                    f.write("%s --insert records amounts %d \n"%(timeStamp2, insertNum))
+            with open('./ouyeel/config/updateOuyeel.txt', 'at', encoding='utf8') as f:
                 if updateNum != 0:
-                    f.write("%s --update records amounts %d \n"%(timeStamp2,updateNum))
+                    f.write("%s --update records amounts %d \n"%(timeStamp2, updateNum))
         except Exception as e:
             pass
+        print("Data saved!")
         return HttpResponse("data has been saved!")
     except Exception as e:
-        print("InsertError",e,)
+        print("InsertError", e, )
     return HttpResponse("you got 404!")
 
-def updateProduct(obj,i,updateNum):
+
+def updateProduct(obj, i, updateNum):
     num = 0
     modiTime = dt.datetime.now().hour
-    if obj.modiDate != str(modiTime):
-        obj.modiDate = modiTime
-        # num += 1
+    obj.modiDate = modiTime
     if obj.publishDate != i["publishDate"]:
         obj.publishDate = i["publishDate"]
         num += 1
@@ -204,6 +213,7 @@ def updateProduct(obj,i,updateNum):
         updateNum += 1
     return updateNum
 
+
 # 退出登录函数
 def logout(request):
 
@@ -215,6 +225,7 @@ def logout(request):
         del request.session['uid']
         print('已经删除uid')
     return HttpResponse('deleted')
+
 
 # 判断是否登录的函数
 def islogged(request):
@@ -232,10 +243,11 @@ def islogged(request):
     #     # 若cookie中有信息# 也回主页
     #     if 'uname' in request.COOKIES and 'uid' in request.COOKIES:
     #         name = json.loads(request.COOKIES['uname'])
-    #         print('cookie:',request.COOKIES['uname'])
+    #         print('cookie:', request.COOKIES['uname'])
     #         return redirect('/index/')
     print('并没有session在')
     return HttpResponse(False)
+
 
 def islogged_views(request):
     print("进入islogged——views")
@@ -252,18 +264,25 @@ def islogged_views(request):
     return False
 
 
+def test_views(request):
+    try:
+        obj = Ouyeel.objects.get(packCode="121")
+        print(obj)
+    except Ouyeel.DoesNotExist as e:
+        print(e)
+    return HttpResponse("ok!")
 # 演示cookie操作
 # def cookie1_views(request):
 #     # resp = HttpResponse('添加cookie成功')
-#     # resp.set_cookie('uid','1002',60*60*24*366)
+#     # resp.set_cookie('uid', '1002', 60*60*24*366)
 #     resp = redirect('/login/')
-#     resp.set_cookie('uname','ct',60*60*24*366)
+#     resp.set_cookie('uname', 'ct', 60*60*24*366)
 #
 #     return resp
 # uname = request.GET.get('uname')
 # uname = request.session.get('uname')
 # if 'uname' in request.session:
-#     print('unm:',request.sesson['uname'])
+#     print('unm:', request.sesson['uname'])
 #     del request.session['uname']
 # if 'uid' in request.session:
 #     del request.session['uid']
@@ -273,7 +292,7 @@ def islogged_views(request):
 #     print('进入log——views')
 #     # cookie = request.COOKIES
 #     # for index in cookie:
-#     #     print(index,':',cookie[index])
+#     #     print(index, ':', cookie[index])
 #     # print(cookie['uname'])
 #     # name = cookie['uname'].encode('latin-1').decode()
 #     # name = json.loads(cookie['uname'])
@@ -285,7 +304,7 @@ def islogged_views(request):
 #         if res:
 #             return redirect('/video/index/')
 #         else:
-#             return render(request,'login.html')
+#             return render(request, 'login.html')
 #
 #     else:
 #         return login_form(request)
@@ -318,7 +337,7 @@ def islogged_views(request):
 #             # 将要返回的内容放入一个变量中，并用该变量设置cookie
 #             # resp = render(request, 'index.html', locals())
 #             # uname = uname.encode('utf-8').decode('latin-1')
-#             resp = redirect('/video/index/',locals())
+#             resp = redirect('/video/index/', locals())
 #             # 用json存取值 先import json
 #             uname = json.dumps(uname)
 #             # 若要取值，则用json.loads(uname)
@@ -343,6 +362,6 @@ def islogged_views(request):
 #     # upwd = request.GET['upwd']
 #     # uhobby = request.GET['uhobby']
 #     # print(request.GET.uhobby[0])
-#     # print(uname,upwd,uhobby)
-#     # return HttpResponse('用户名:'+uname+',密码：'+upwd+',爱好：'+uhobby)
-#     return render(request,'02_form.html',locals())
+#     # print(uname, upwd, uhobby)
+#     # return HttpResponse('用户名:'+uname+', 密码：'+upwd+', 爱好：'+uhobby)
+#     return render(request, '02_form.html', locals())

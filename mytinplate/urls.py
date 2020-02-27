@@ -16,9 +16,17 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic.base import TemplateView
+from django.views import static
+from django.conf import settings
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url('^', include('ouyeel.urls')),
+    url(r'^$',TemplateView.as_view(template_name="index.html")),
+
+    url('^api/', include('ouyeel.urls')),
+    url(r'^assets/(?P<path>.*)$', static.serve,
+        {'document_root': settings.STATIC_DIR},),
 
 ]

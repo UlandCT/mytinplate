@@ -146,7 +146,7 @@ class Ouyeel(models.Model):
     storeCityName = models.CharField(max_length=20, verbose_name="仓储城市名称", null=True, blank=True)
     supervisionRate = models.CharField(max_length=20, verbose_name="监理等级", null=True, blank=True)
     surfaceDispose = models.CharField(max_length=20, verbose_name="表面处理", null=True, blank=True)
-    surfaceProcess = models.CharField(max_length=20, verbose_name="表面处理过程工艺", null=True, blank=True)
+    surfaceProcess = models.CharField(max_length=100, verbose_name="表面处理过程工艺", null=True, blank=True)
     targetingCodes = models.CharField(max_length=20, verbose_name="目标编码", null=True, blank=True)
     techStandard = models.CharField(max_length=100, verbose_name="技术标准", null=True, blank=True)
     tensionKl = models.CharField(max_length=20, verbose_name="张力K1", null=True, blank=True)
@@ -337,16 +337,15 @@ class Ouyeel(models.Model):
             'hasQualityCert': self.hasQualityCert,
             'hasQualityInfo': self.hasQualityInfo,
             'manufactureName': self.manufactureName,
+            'manufactureDate': self.manufactureDate,
+            'resourceId': self.resourceId,
             'packCode': self.packCode,
-            'packType': self.packType,
-            'paintType': self.paintType,
             'penaltyAmt': self.penaltyAmt,
             'penaltyAmtRate': self.penaltyAmtRate,
             'productCode': self.productCode,
             'productName': self.productName,
             'productTypeCode': self.productTypeCode,
             'productTypeName': self.productTypeName,
-            'publishDate': self.publishDate,
             'publishPrice': self.publishPrice,
             'qualityGrade': self.qualityGrade,
             'qualityGradeName': self.qualityGradeName,
@@ -355,12 +354,6 @@ class Ouyeel(models.Model):
             'shopSign': self.shopSign,
             'smallFrontPicUrl': self.smallFrontPicUrl,
             'spec': self.spec,
-            'spec1': self.spec1,
-            'spec2': self.spec2,
-            'spec3': self.spec3,
-            'spec4': self.spec4,
-            'spec5': self.spec5,
-            'spec6': self.spec6,
             'specComment': self.specComment,
             'specialComments': self.specialComments,
             'storeCityName': self.storeCityName,

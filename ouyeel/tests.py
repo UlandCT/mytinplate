@@ -2,27 +2,28 @@ from django.test import TestCase
 from time import ctime, sleep
 import requests,urllib.parse,urllib.request,json,threading
 # Create your tests here.
+from mytinplate.settings import *
 def main():
     headers = {}
-    # url = "http://localhost:8000/queryResultList"
-    url = "https://localhost:8000"
-    # param = {"parameters":{
-    #     'sourceCode':'2',
-    #     'productCode':'1',
-    # }}
+    url = "http://localhost:800/api/queryResultList"
+    # url = "https://localhost:800/api/bGradeProduct"
+    param = {"parameters":{
+        'sourceCode':'2',
+        'productCode':'1',
+    }}
     # param = {"param":[1,2,3,4]}
-    param = {"param":"this is param!"}
-    # param = urllib.parse.urlencode(param)
-    # url = url + "?" +param
+    # param = {"param":"this is param!"}
+    param = urllib.parse.urlencode(param)
+    url = url + "?" +param
     # request = urllib.request.Request(url,headers=headers)
-    # res1 = urllib.request.urlopen(request)
-    res = requests.get(url=url,headers=headers,data=param)
+    # res = urllib.request.urlopen(request)
+    res = requests.get(url=url,headers=headers, timeout=10)
     print(res.text)
     res = json.loads(res.text)
-    resList = []
-    for i in res["resultList"]:
-        if i["productTypeCode"]== "TL60":
-            resList.append(i)
+    # resList = []
+    # for i in res["resultList"]:
+    #     if i["productTypeCode"]== "TL60":
+    #         resList.append(i)
     print(1111)
 
 def jsonstr():
@@ -56,4 +57,6 @@ if __name__ == "__main__":
     main()
     # jsonstr()
     import os
-    print(111)
+    # print(111)
+    # a = STATICFILES_DIRS
+    # print(a)
