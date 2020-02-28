@@ -1,4 +1,7 @@
 import json
+from .apiFuc import *
+from django.db.models import Q
+
 from .setting import *
 # from django.core import serializers
 # from django.shortcuts import render, redirect
@@ -18,7 +21,16 @@ def index_views(request):
     if "REMOTE_ADDR" in request.META:
         ip = request.META['REMOTE_ADDR']
         print("REMOTE_ADDR:", ip)
+    timeStamp = (dt.datetime.now() - dt.timedelta(days=1)).strftime("%y-%m-%d")
+    res = Ouyeel.objects.filter(businessTimes=timeStamp, productCode=duxi, onBusiness="1", ).order_by('basicPrice')[0:25]
+    resLst = []
+    for i in res:
+        dic = i.to_small_dic()
+        # dic = json.dumps(dic)
+        resLst.append(dic)
 
+    print("长度==", len(resLst), "类型：", type(res))
+    print(resLst)
     return HttpResponse("welcome to mytinplate view!")
 
 
@@ -29,13 +41,13 @@ def queryResultList(request):
             param = request.GET.get("parameters")
             param = json.loads(json.dumps(eval(param)))
             if "sourceCode" not in param.keys() or "productCode" not in param.keys():
-                return HttpResponse("paramError")
+                return HttpResponse(json.dumps(errCode))
         except Exception as e:
             print("Get err :", e)
             return HttpResponse(json.dumps(errCode))
 
         try:
-            res = queryResult(param)
+            res, amount = queryResult(param)
             if not res:
                 return HttpResponse(json.dumps(nullCode))
             resLst = []
@@ -45,54 +57,15 @@ def queryResultList(request):
                 # dic = json.dumps(dic)
                 resLst.append(dic)
             # querydic = serializers.serialize('json', res)
-            print("记录条数：", len(resLst))
-            successCode["resultList"] = resLst
-            return HttpResponse(json.dumps(successCode))
+            # print("记录条数：", len(resLst))
+            newSuccessCode = successCode.copy()
+            newSuccessCode["resultList"] = resLst
+            newSuccessCode["amount"] = amount
+            # print(successCode)
+            return HttpResponse(json.dumps(newSuccessCode))
         except Exception as e:
             print(e)
             return HttpResponse(json.dumps(errCode))
-
-
-def getCode(param):
-    if param["sourceCode"] == '2':
-        modelName = oy
-    elif param["sourceCode"] == '1':
-            modelName = mt
-    elif param["sourceCode"] == '3':
-        modelName = ot
-    else:
-        modelName = None
-
-    if param["productCode"] == '0':
-        productCode = "ALL"
-    elif param["productCode"] == '1':
-        productCode = duxi
-    elif param["productCode"] == '2':
-        productCode = duge
-    elif param["productCode"] == '3':
-        productCode = dugefumo
-    else:
-        productCode = None
-    return modelName, productCode
-
-
-def queryResult(param):
-    modelName, productCode = getCode(param)
-    timeStamp = dt.datetime.now().strftime("%y-%m-%d")
-
-    if modelName != None and productCode != None:
-        if productCode != "ALL":
-            res = eval(modelName).objects.filter(businessTimes=timeStamp, productCode=productCode, onBusiness="1", )
-            if not res:
-                timeStamp = (dt.datetime.now() - dt.timedelta(days=1)).strftime("%y-%m-%d")
-                res = eval(modelName).objects.filter(businessTimes=timeStamp, productCode=productCode, onBusiness="1", )
-        else:
-            res = eval(modelName).objects.filter(businessTimes=timeStamp, onBusiness="1", )
-            if not res:
-                timeStamp = (dt.datetime.now() - dt.timedelta(days=1)).strftime("%y-%m-%d")
-                res = eval(modelName).objects.filter(businessTimes=timeStamp, onBusiness="1", )
-
-        return res
 
 
 def reportB_grade(request):
@@ -100,7 +73,8 @@ def reportB_grade(request):
     try:
         timeStamp = dt.datetime.now().strftime("%y-%m-%d")
         modiTime = dt.datetime.now().hour
-        res = Ouyeel.objects.filter(businessTimes=timeStamp, qualityGrade__contains="B", onBusiness='1', modiDate=modiTime)
+        res = Ouyeel.objects.filter(Q(qualityGrade__startswith="B"), \
+                                    businessTimes=timeStamp, onBusiness='1', modiDate=modiTime)
         if res:
             resLst = []
             for i in res:
@@ -146,6 +120,9 @@ def getDataToOyDb(request):
                     modiTime = dt.datetime.now().hour
                     i["businessTimes"] = timeStamp
                     i["modiDate"] = modiTime
+                    if "B" in i["qualityGrade"]:
+                        modiTime = dt.datetime.now().hour
+                        i["modiDate"] = modiTime
                     obj = Ouyeel(**i)
                     obj.save()
                     insertNum += 1
@@ -157,10 +134,10 @@ def getDataToOyDb(request):
         try:
             with open('./ouyeel/config/insertOuyeel.txt', 'at', encoding='utf8') as f:
                 if insertNum != 0:
-                    f.write("%s --insert records amounts %d \n"%(timeStamp2, insertNum))
+                    f.write("%s --insert records amounts %d \n" % (timeStamp2, insertNum))
             with open('./ouyeel/config/updateOuyeel.txt', 'at', encoding='utf8') as f:
                 if updateNum != 0:
-                    f.write("%s --update records amounts %d \n"%(timeStamp2, updateNum))
+                    f.write("%s --update records amounts %d \n" % (timeStamp2, updateNum))
         except Exception as e:
             pass
         print("Data saved!")
@@ -170,48 +147,7 @@ def getDataToOyDb(request):
     return HttpResponse("you got 404!")
 
 
-def updateProduct(obj, i, updateNum):
-    num = 0
-    modiTime = dt.datetime.now().hour
-    obj.modiDate = modiTime
-    if obj.publishDate != i["publishDate"]:
-        obj.publishDate = i["publishDate"]
-        num += 1
-    if int(obj.publishPrice) != i["publishPrice"]:
-        obj.publishPrice = i["publishPrice"]
-        num += 1
-    if int(obj.basicPrice) != i["basicPrice"]:
-        obj.basicPrice = i["basicPrice"]
-        num += 1
-    if int(obj.basicPrice) != i["basicPrice"]:
-        obj.basicPrice = i["basicPrice"]
-        num += 1
-    if obj.hasShop != i["hasShop"]:  # 是否竞拍
-        obj.hasShop = i["hasShop"]
-        num += 1
-    if int(obj.onBusiness) != i["onBusiness"]:  # 是否正在营业
-        obj.onBusiness = i["onBusiness"]
-        num += 1
-    if obj.bidBeginDate != i["bidBeginDate"]:
-        obj.bidBeginDate = i["bidBeginDate"]
-        num += 1
-    if obj.bidEndDate != i["bidEndDate"]:
-        obj.bidEndDate = i["bidEndDate"]
-        num += 1
-    if obj.warehouseName != i["warehouseName"]:
-        obj.warehouseName = i["warehouseName"]
-        num += 1
-    if obj.storeCityName != i["storeCityName"]:
-        obj.storeCityName = i["storeCityName"]
-        num += 1
-    timeStamp = dt.datetime.now().strftime("%y-%m-%d")
-    if obj.businessTimes != timeStamp:
-        obj.businessTimes = timeStamp
-        num += 1
-    if num > 0:
-        obj.save()
-        updateNum += 1
-    return updateNum
+
 
 
 # 退出登录函数

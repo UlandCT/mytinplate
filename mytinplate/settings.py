@@ -27,7 +27,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
-ALLOWED_IPS = ['125.127.0.0','localhost','127.0.0.1','115.204.0.0','115.196.0.0','58.101.0.0','112.10.0.0',]
+ALLOWED_IPS = ['125.127.0.0','localhost','127.0.0.1','115.204.0.0','115.196.0.0','58.101.0.0','112.10.0.0','192.168.0.0']
 DISALLOWED_IPS = []
 # Application definition
 

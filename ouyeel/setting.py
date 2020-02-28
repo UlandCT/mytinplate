@@ -12,3 +12,6 @@ ot = "Other"
 successCode = {"resultCode":0}
 nullCode = {"resultCode":1}
 errCode = {"resultCode":2}
+
+#[filter condition]
+MOUNTS = 20

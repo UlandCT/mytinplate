@@ -4,7 +4,7 @@ from .views import *
 
 # 创建视图函数，用于处理路由分发请求
 urlpatterns = [
-    # url(r'^$',index_views),
+    url(r'^index$',index_views),
     # url(r'^index/$',index_views1),
     url(r'^bGradeProduct$',reportB_grade),
     url(r'^queryResultList$',queryResultList,),
