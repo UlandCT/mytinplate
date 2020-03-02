@@ -34,6 +34,31 @@ def index_views(request):
     return HttpResponse("welcome to mytinplate view!")
 
 
+def query_single_product(request):
+    print("正在查询单一数据...")
+    if request.method == 'GET':
+        try:
+            param = request.GET.get("parameters")
+            param = json.loads(json.dumps(eval(param)))  # bad code
+            if "packCode" not in param.keys():
+                return HttpResponse(json.dumps(errCode))
+        except Exception as e:
+            print("Get err :", e)
+            return HttpResponse(json.dumps(errCode))
+
+        try:
+            res = query_single_record(param)
+            if not res:
+                return HttpResponse(json.dumps(nullCode))
+            res = res.to_small_dic()
+            newSuccessCode = successCode.copy()
+            newSuccessCode["result"] = res
+            return HttpResponse(json.dumps(newSuccessCode))
+        except Exception as e:
+            print(e)
+            return HttpResponse(json.dumps(errCode))
+
+
 def queryResultList(request):
     print("正在查询...")
     if request.method == 'GET':
@@ -301,3 +326,4 @@ def test_views(request):
 #     # print(uname, upwd, uhobby)
 #     # return HttpResponse('用户名:'+uname+', 密码：'+upwd+', 爱好：'+uhobby)
 #     return render(request, '02_form.html', locals())
+

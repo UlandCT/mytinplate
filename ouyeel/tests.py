@@ -4,12 +4,16 @@ import requests,urllib.parse,urllib.request,json,threading
 # Create your tests here.
 from mytinplate.settings import *
 def main():
+    origin_list = ["http://101.133.162.19:80", "http://localhost:18181"]
+    access_list = ["/api/querySingleProduct", "/api/queryResultList"]
+    origin = origin_list[0]
+    access = access_list[1]
     headers = {}
-    url = "http://localhost:800/api/queryResultList"
-    # url = "https://localhost:800/api/bGradeProduct"
+    url = origin + access
     param = {"parameters":{
-        'sourceCode':'2',
-        'productCode':'1',
+        'sourceCode': '2',
+        'productCode': "1",
+        'packCode': '9ZG2165',
     }}
     # param = {"param":[1,2,3,4]}
     # param = {"param":"this is param!"}

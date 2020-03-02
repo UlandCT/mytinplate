@@ -11,16 +11,25 @@
 
 
 [resultCode]
-successCode = 0 #成功返回
-nullCode = 1  #查询为空
-errCode = 2  #参数错误
+resultCode = 0 #成功返回
+resultCode = 1  #查询为空
+resultCode = 2  #参数错误
 
 [interface]
-name:/queryResultList
+name:/api/queryResultList
 Query String Parameters :
     {"parameters":{
             'sourceCode':'2',
             'productCode':'1',
+        }
+    }
+Form Data : 无
+--------------------------------------
+name:/api/querySingleProduct
+Query String Parameters :
+    {"parameters":{
+            'sourceCode':'2',
+            'packCode':'9ZG2165',
         }
     }
 Form Data : 无
