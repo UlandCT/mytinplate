@@ -67,7 +67,7 @@ def queryResult(param):
                 timeStamp = (dt.datetime.now() - dt.timedelta(days=1)).strftime("%y-%m-%d")
                 res = eval(modelName).objects.filter(~Q(qualityGrade__startswith="B"), businessTimes=timeStamp, onBusiness="1", )
         if not res:
-            return
+            return "", 0
         begin = 0 + (page - 1) * MOUNTS
         end = page * MOUNTS
         if len(res) <= begin:

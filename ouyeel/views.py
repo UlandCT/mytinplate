@@ -86,7 +86,7 @@ def queryResultList(request):
             newSuccessCode = successCode.copy()
             newSuccessCode["resultList"] = resLst
             newSuccessCode["amount"] = amount
-            # print(successCode)
+            print(newSuccessCode)
             return HttpResponse(json.dumps(newSuccessCode))
         except Exception as e:
             print(e)

@@ -132,6 +132,7 @@ USE_TZ = True
 STATIC_URL = '/assets/'
 STATIC_DIR = os.path.join(BASE_DIR,"mytinplate_fe/dist/assets/").replace("\\",'/')
 STATICFILES_DIRS = (
+    # "E:/python/github/mytinplate_fe/src/assets/",
     os.path.join(BASE_DIR,"mytinplate_fe/dist/assets/").replace("\\","/"),
 )
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

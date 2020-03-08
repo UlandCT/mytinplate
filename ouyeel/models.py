@@ -31,7 +31,7 @@ class Ouyeel(models.Model):
     depositAmt = models.CharField(max_length=20, verbose_name="定金额度", null=True, blank=True)
     displayZone = models.CharField(max_length=20, verbose_name="展示区域", null=True, blank=True)
     earnestRatio = models.CharField(max_length=20, verbose_name="定金比例", null=True, blank=True)
-    factoryResCode = models.CharField(max_length=20, verbose_name="工厂编码", null=True, blank=True)
+    factoryResCode = models.CharField(max_length=20, verbose_name="钢厂资源号", null=True, blank=True)
     firstPriceIncrement = models.CharField(max_length=20, verbose_name="首次价格增长", null=True, blank=True)
     gradenumThick = models.CharField(max_length=20, verbose_name="评级数量厚度", null=True, blank=True)
     hasBlockChainQualityCert = models.CharField(max_length=20, verbose_name="区块链质量认证", null=True, blank=True)
@@ -43,7 +43,7 @@ class Ouyeel(models.Model):
     hasVideo = models.CharField(max_length=20, verbose_name="有无视频", null=True, blank=True)
     isAddBid = models.CharField(max_length=20, verbose_name="有无竞价加价", null=True, blank=True)
     isAfterSettle = models.CharField(max_length=20, verbose_name="后续解决", null=True, blank=True)
-    isAttention = models.CharField(max_length=20, verbose_name="关注", null=True, blank=True)
+    isAttention = models.CharField(max_length=20, verbose_name="是否关注", null=True, blank=True)
     isBailAllowed = models.CharField(max_length=20, verbose_name="允许担保", null=True, blank=True)
     isBargain = models.CharField(max_length=20, verbose_name="是否可议价", null=True, blank=True)
     isCompetitiveRes = models.CharField(max_length=20, verbose_name="任务开始时间", null=True, blank=True)
@@ -324,13 +324,16 @@ class Ouyeel(models.Model):
             'weightMethod': self.weightMethod,
             'whValidatedFlag': self.whValidatedFlag
            }
-
+        if goodsInfoes["shopSign"] == "MIX" and self.refShopSign:
+            goodsInfoes["shopSign"] = self.refShopSign
         return goodsInfoes
 
     def to_small_dic(self):
         goodsInfoes = {
             'balanceWeight': self.balanceWeight,
             'basicPrice': self.basicPrice,
+            'factoryResCode': self.factoryResCode,
+            'location': self.location,
             'manufactureName': self.manufactureName,
             'manufactureDate': self.manufactureDate,
             'resourceId': self.resourceId,
@@ -339,6 +342,7 @@ class Ouyeel(models.Model):
             'productTypeCode': self.productTypeCode,
             'productTypeName': self.productTypeName,
             'publishPrice': self.publishPrice,
+            'qualityFlag': self.qualityFlag,
             'qualityGrade': self.qualityGrade,
             'qualityGradeName': self.qualityGradeName,
             'shopSign': self.shopSign,
@@ -350,6 +354,8 @@ class Ouyeel(models.Model):
             'ticketRate': self.ticketRate,
             'weight': self.weight,
            }
+        if goodsInfoes["shopSign"] == "MIX" and self.refShopSign:
+            goodsInfoes["shopSign"] = self.refShopSign
         return goodsInfoes
 
     def to_little_dic(self):
@@ -381,8 +387,9 @@ class Ouyeel(models.Model):
             'spec6': self.spec6,
             'storeCityName': self.storeCityName,
             'techStandard': self.techStandard,
-
            }
+        if goodsInfoes["shopSign"] == "MIX" and self.refShopSign:
+            goodsInfoes["shopSign"] = self.refShopSign
         return goodsInfoes
 
     class Meta:
