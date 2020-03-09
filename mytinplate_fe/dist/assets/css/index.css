@@ -1,0 +1,317 @@
+header{width:100%;text-align: center;color: #FFFFFF;position: fixed;z-index: 99;}
+header.fixed{background: #ffffff;position: fixed;z-index: 99;color: #111111;-webkit-box-shadow: 0 0 12px #aaaaaa;box-shadow: 0 0 12px #aaaaaa;}
+
+/*导航*/
+.m-nav {width: 80%;}
+.m-nav .m-nav-item {color: inherit;padding: 25px 30px;height: 65px;line-height: 65px;}
+.m-nav .m-nav-item.active{background-color: #F14B4A;color: #fff;-webkit-box-shadow: 0 0 2px #ff7500;box-shadow: 0 0 2px #ff7500;}
+
+
+.m-dialog{width: 100%;height: 100%;position: fixed;top:0;bottom:0;left: 0;right: 0;z-index: 100;}
+.m-dialog .mask{width: 100%;height: 100%;background-color: #000;opacity: .1;}
+.m-dialog-main{
+    background-color: #fff;position: absolute;z-index: 101;top: 50%;left:50%;-webkit-transform: translate(-50%,-50%);transform: translate(-50%,-50%);
+    width: 60%;-webkit-box-shadow: 0 10px 10px #666;box-shadow: 0 10px 10px #666;
+}
+.m-dialog-title{text-align: center;padding: 14px;border-bottom: 1px solid #eee;}
+.m-dialog-close{text-align: right;padding: 50px;border-bottom: 1px solid #eee;}
+.m-dialog-content{padding: 14px 28px;display: -webkit-box;display: -ms-flexbox;display: flex;}
+.m-dialog-content .goods-img{background-color: #f5f5f5;padding: 18px;}
+.m-dialog-content .goods-info{-webkit-box-flex:1;-ms-flex:1;flex:1;margin-left: 28px;}
+.info-block{padding: 10px;background-color: #f5f5f5;}
+.m-dialog-foot{text-align: center;padding: 18px;border-top: 1px solid #eee;}
+
+
+
+* {
+                          -webkit-box-sizing: border-box;
+                          box-sizing: border-box;
+                      }
+body,
+div,
+input,
+button,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+dl,
+dt,
+dd {
+    margin: 0;
+    padding: 0;
+}
+body,
+button,
+input,
+select,
+textarea {
+    font: 14px/1.8 'Lato', 'Helvetica Neue', 'PingFang SC', 'Myriad Pro', 'Hiragino Sans GB', 'microsoft yahei';
+    color: #333333;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 100%;
+}
+a {
+    text-decoration: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    /*设置的tap  A标签的时候出现的黑色高亮*/
+}
+a:active {
+    outline: 0;
+}
+i,
+em {
+    font-style: normal;
+}
+img {
+    border: 0;
+}
+ol,
+ul,
+li {
+    list-style: none;
+}
+
+
+html, body {
+    background-color: #ffffff;
+}
+.g-flex-column {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.g-flex-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.g-flex {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+.g-head {
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+.g-main {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    width: 100%;
+}
+.g-foot {
+    max-width: 980px;
+    padding-top: 20px;
+    margin-bottom: 60px;
+    border-top: 1px solid;
+}
+.flex-warp {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+}
+.u-btn {
+    min-width: 52px;
+    display: inline-block;
+    color: #fff;
+    text-align: center;
+    background-color: #F14B4A;
+    padding: 2px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.strong {
+    font-weight: bold;
+}
+h1 {
+    font-size: 42px;
+}
+h2 {
+    font-size: 38px;
+}
+h3 {
+    font-size: 34px;
+}
+h4 {
+    font-size: 30px;
+}
+.f1 {
+    font-size: 20px;
+}
+.f2 {
+    font-size: 24px;
+}
+.f3 {
+    font-size: 28px;
+}
+.f4 {
+    font-size: 34px;
+}
+.f5 {
+    font-size: 84px;
+}
+.c1 {
+    color: #F14B4A;
+}
+.c2 {
+    color: #eee;
+}
+.c3 {
+    color: #aaa;
+}
+.bg-c1 {
+    background-color: #fff;
+}
+.bg-c2 {
+    background-color: #f5f5f5;
+}
+.holder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -35%);
+    transform: translate(-50%, -35%);
+}
+/*banner*/
+.swiper-container {
+    width: 100%;
+    height: 40vw;
+    margin-top: 66px;
+}
+.swiper-slide img {
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+/*主页盒子*/
+.m-box {
+    padding: 40px 0;
+}
+.m-box-title {
+    text-align: center;
+    position: relative;
+}
+.m-box-body {
+    width: 80%;
+    margin: 0 auto;
+}
+/*分类模块*/
+.m-catalog-bar,
+.m-goods-list-item {
+    background-color: #fff;
+}
+.m-catalog-bar {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin-top: 18px;
+    margin-bottom: 2px;
+    padding: 18px;
+}
+.m-catalog-bar:first-child {
+    margin-top: 0;
+}
+.m-goods-list-item {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 18px;
+}
+.goods-img {
+    width: 160px;
+    height: 160px;
+    line-height: 160px;
+    overflow: hidden;
+    padding: 14px;
+}
+.goods-img img {
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+.goods-info {
+    margin-left: 12px;
+}
+.goods-price {
+    padding: 0 20px;
+    text-align: center;
+}
+.m-price {
+    background-color: #f9ecec;
+    padding: 10px;
+    border-bottom: 1px solid #F14B4A;
+}
+.m-price .product-property {
+    margin-bottom: 6px;
+}
+.product-property-type {
+    color: #666666;
+    display: inline-block;
+    width: 60px;
+}
+.product-property-cont {
+    margin-left: 12px;
+    display: inline-block;
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static '/css/index.css' %}">
+<!--  <link rel="stylesheet" href="./index.css">-->
+</head>
+<body>
+<noscript>
+  <strong>We're sorry but zero doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+</noscript>
+<div class="home g-flex-column">
+  <header class="g-flex-row fixed">
+    <div class="g-head">
+      <div class="logo"></div>
+      <nav class="m-nav">
+        <a href="" class="m-nav-item active">首页</a>
+        <a href="#product" class="m-nav-item">产品中心</a>
+        <a href="#news" class="m-nav-item">行业资讯</a>
+        <a href="#about" rel="external nofollow" class="m-nav-item">关于我们</a>
+        <a href="#search" class="m-nav-item">搜索</a>
+      </nav>
+    </div>
+  </header>
+  <div class="block" style="height: 70px;"></div>
+  <div class="m-goods-detail g-flex-row">
+    <div class="goods-img">
+      <img src="{% static '/imgs/goods2.jpg' %}">
+    </div>
+    <div class="goods-info">
+      <p>
+        <span class="f3">{{goodsInfo.manufactureName}} {{goodsInfo.productName}}</span>
+        <span class="c3 f2">{{goodsInfo.spec}} {{goodsInfo.shopSign}}</span>
+      </p>
+      <ul class="m-price">
+        <li class="product-property">
+          <span class="product-property-type">价格</span>
+          <div class="product-property-cont">
+            <span class="c1 f3">￥{{goodsInfo.basicPrice}}</span>
+          </div>
+        </li>
+        <li class="product-property">
+          <span class="product-property-type">重量</span>
+          <span class="product-property-cont">{{goodsInfo.balanceWeight}}</span>
+        </li>
+        <li class="product-property">
+          <span class="product-property-type">仓储费</span>
+          <span class="product-property-cont">以供应商与仓库约定为准</span>
+        </li>
+        <li class="product-property">
+          <span class="product-property-type">出库费</span>
+          <span class="product-property-cont">以供应商与仓库约定为准</span>
+        </li>
+      </ul>
+      <p>规格：{{goodsInfo.specComment}}</p>
+      <p>钢厂资源号：{{goodsInfo.factoryResCode}}</p>
+      <p>出厂日期：{{goodsInfo.manufactureDate}}</p>
+      <p>存放地：{{goodsInfo.storeCityName}}</p>
+      <p>技术标准：{{goodsInfo.techStandard}}</p>
+      <p>质量等级：{{goodsInfo.qualityGradeName}}</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

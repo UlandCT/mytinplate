@@ -9,6 +9,8 @@ urlpatterns = [
     url(r'^bGradeProduct$',reportB_grade),
     url(r'^queryResultList$',queryResultList,),
     url(r'^getDataToOyDb$',getDataToOyDb),
+    url(r'^goDetail$',goDetail),
+
 
 
 
