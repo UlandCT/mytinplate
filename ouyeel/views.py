@@ -1,7 +1,7 @@
 import json
 from .apiFuc import *
 from django.db.models import Q
-from django.template import loader
+
 from .setting import *
 # from django.core import serializers
 # from django.shortcuts import render, redirect
@@ -327,22 +327,5 @@ def test_views(request):
 #     # return HttpResponse('用户名:'+uname+', 密码：'+upwd+', 爱好：'+uhobby)
 #     return render(request, '02_form.html', locals())
 
-def goDetail(request):
-    param = {
-        "sourceCode":"2",
-        "packCode":"9ZG2165",
-    }
-    try:
-        res = query_single_record(param)
-        if not res:
-            return HttpResponse(json.dumps(nullCode))
-        res = res.to_small_dic()
-        html = loader.get_template('god.html')
-        html = html.render(res)
-        with open("E:/9ZG215.html",'wt', encoding="utf8") as f:
-            f.write(html)
-        return HttpResponse(html)
-    except Exception as e:
-        print(e)
-        return HttpResponse(json.dumps(errCode))
+
 

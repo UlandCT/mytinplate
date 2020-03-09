@@ -1,7 +1,23 @@
 from .setting import *
 import datetime as dt
 from django.db.models import Q
+from django.template import loader
 from ouyeel.models import *
+
+
+def goDetail(param, temp, path):
+    try:
+        res = query_single_record(param)
+        if not res:
+            return
+        res = res.to_small_dic()
+        html = loader.get_template(temp)
+        html = html.render(res)
+        with open(path,'wt', encoding="utf8") as f:
+            f.write(html)
+    except Exception as e:
+        print(e)
+
 
 def getCode(param):
     if "sourceCode" in param:
