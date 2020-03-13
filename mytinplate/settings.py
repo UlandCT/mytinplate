@@ -24,6 +24,7 @@ SECRET_KEY = 'c16#y+ek59^ad*$vg9kd!v+kr(08ng9&w-lofdp-%$_qc46m4g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+NGX_DIR = os.path.join(os.path.dirname(BASE_DIR), 'ngx/html/')
 
 ALLOWED_HOSTS = ["*"]
 
@@ -83,7 +84,7 @@ DATABASES = {
         'NAME': 'mytinplate',
         'PORT': '3306',
         'HOST': 'localhost',
-        'PASSWORD':'123456789',
+        'PASSWORD': '123456789',
         'USER': 'mytinplate',
 
     }
@@ -112,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 LANGUAGES = [
-    ('zh-Hans', ('Chinese')),
+    ('zh-Hans', 'Chinese'),
 ]
 
 LANGUAGE_CODE = 'zh-Hans'
@@ -130,10 +131,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/assets/'
-STATIC_DIR = os.path.join(BASE_DIR,"mytinplate_fe/dist/assets/").replace("\\",'/')
+STATIC_DIR = os.path.join(BASE_DIR, "mytinplate_fe/dist/assets/").replace("\\", '/')
 STATICFILES_DIRS = (
-    # "E:/python/github/mytinplate_fe/src/assets/",
-    os.path.join(BASE_DIR,"mytinplate_fe/dist/assets/").replace("\\","/"),
+    os.path.join(BASE_DIR, "mytinplate_fe/dist/assets/").replace("\\", "/"),
 )
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 60*60

@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <title>Title</title>
   {% load static %}
-  <link rel="stylesheet" href="{% static '/css/index.css' %}">
+  <link rel="stylesheet" href="{% static '/css/chunk-common.eba4b8d3.css' %}">
+  <link rel="stylesheet" href="{% static '/css/chunk-vendors.bf66e790.css' %}">
 <!--  <link rel="stylesheet" href="./index.css">-->
 </head>
 <body>
 <noscript>
-  <strong>We're sorry but zero doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+  <strong>We're sorry but mytinplate doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
 </noscript>
 <div class="home g-flex-column">
   <header class="g-flex-row fixed">
@@ -27,7 +28,11 @@
   <div class="block" style="height: 70px;"></div>
   <div class="m-goods-detail g-flex-row">
     <div class="goods-img">
-      <img src="{% static '/imgs/goods2.jpg' %}">
+          {% if 'c' in goodsInfo.spec or "C" in goodsInfo.spec %}
+              <img src="{% static '/img/goods1.jpg' %}">
+              {% else %}
+              <img src="{% static '/img/goods2.jpg' %}">
+          {% endif %}
     </div>
     <div class="goods-info">
       <p>

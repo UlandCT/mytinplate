@@ -1,7 +1,6 @@
 import json
 from .apiFuc import *
 from django.db.models import Q
-
 from .setting import *
 # from django.core import serializers
 # from django.shortcuts import render, redirect
@@ -51,6 +50,10 @@ def query_single_product(request):
             if not res:
                 return HttpResponse(json.dumps(nullCode))
             res = res.to_small_dic()
+            # 生成详情页的静态页面
+            from django.conf import settings
+            path = settings.NGX_DIR + "/detail/{}.html".format(res["packCode"])
+            generate_detail(res, "detail.html", path)
             newSuccessCode = successCode.copy()
             newSuccessCode["result"] = res
             return HttpResponse(json.dumps(newSuccessCode))

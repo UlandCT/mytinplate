@@ -6,7 +6,7 @@ from mytinplate.settings import *
 def main():
     origin_list = ["http://101.133.162.19:18181", "http://localhost:18181"]
     access_list = ["/api/querySingleProduct", "/api/queryResultList"]
-    origin = origin_list[0]
+    origin = origin_list[1]
     access = access_list[0]
     headers = {}
     url = origin + access
@@ -14,6 +14,7 @@ def main():
         'sourceCode': '2',
         'productCode': "1",
         'packCode': '9ZG2165',
+        # 'packCode': '01D0426',
     }}
     # param = {"param":[1,2,3,4]}
     # param = {"param":"this is param!"}
@@ -56,11 +57,5 @@ def jsonstr():
     print("finished at %s" % ctime())
 
 
-
 if __name__ == "__main__":
     main()
-    # jsonstr()
-    import os
-    # print(111)
-    # a = STATICFILES_DIRS
-    # print(a)

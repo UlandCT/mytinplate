@@ -8,10 +8,10 @@ oy = "Ouyeel"
 mt = "Mt"
 ot = "Other"
 
-#[resultCode]
-successCode = {"resultCode":0}
-nullCode = {"resultCode":1}
-errCode = {"resultCode":2}
+# [resultCode]
+successCode = {"resultCode": 0}
+nullCode = {"resultCode": 1}
+errCode = {"resultCode": 2}
 
-#[filter condition]
+# [filter condition]
 MOUNTS = 20
