@@ -332,6 +332,7 @@ class Ouyeel(models.Model):
         goodsInfoes = {
             'balanceWeight': self.balanceWeight,
             'basicPrice': self.basicPrice,
+            'businessTimes': self.businessTimes,
             'factoryResCode': self.factoryResCode,
             'location': self.location,
             'manufactureName': self.manufactureName,
@@ -356,6 +357,7 @@ class Ouyeel(models.Model):
            }
         if goodsInfoes["shopSign"] == "MIX" and self.refShopSign:
             goodsInfoes["shopSign"] = self.refShopSign
+        goodsInfoes["businessTimes"] = "20" + goodsInfoes["businessTimes"]
         return goodsInfoes
 
     def to_little_dic(self):

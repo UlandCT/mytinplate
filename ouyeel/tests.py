@@ -6,7 +6,7 @@ from mytinplate.settings import *
 def main():
     origin_list = ["http://101.133.162.19:18181", "http://localhost:18181"]
     access_list = ["/api/querySingleProduct", "/api/queryResultList"]
-    origin = origin_list[1]
+    origin = origin_list[0]
     access = access_list[0]
     headers = {}
     url = origin + access
@@ -58,4 +58,9 @@ def jsonstr():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    d = "20-03-11"
+    d = "20" + d
+
+
+    print(d)

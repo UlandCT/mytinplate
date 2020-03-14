@@ -64,8 +64,6 @@ def query_single_record(param):
 def queryResult(param):
     modelName, productCode, page = getCode(param)
     timeStamp = dt.datetime.now().strftime("%y-%m-%d")
-
-
     if modelName != None and productCode != None:
         if productCode != "ALL":
             res = eval(modelName).objects.filter(~Q(qualityGrade__startswith="B"), businessTimes=timeStamp, productCode=productCode, onBusiness="1", )
