@@ -4,7 +4,6 @@ from django.db.models import Q
 from django.template import loader
 from ouyeel.models import *
 
-
 def generate_detail(res, temp, path):
     try:
         html = loader.get_template(temp)
@@ -12,7 +11,7 @@ def generate_detail(res, temp, path):
         with open(path, 'wt', encoding="utf8") as f:
             f.write(html)
     except Exception as e:
-        print(e)
+        print("write Html Error:", e)
 
 
 def getCode(param):

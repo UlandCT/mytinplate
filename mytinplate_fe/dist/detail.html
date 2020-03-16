@@ -4,35 +4,34 @@
   <meta charset="UTF-8">
   <title>Title</title>
   {% load static %}
-  <link rel="stylesheet" href="{% static '/css/chunk-common.eba4b8d3.css' %}">
-  <link rel="stylesheet" href="{% static '/css/chunk-vendors.bf66e790.css' %}">
-<!--  <link rel="stylesheet" href="./index.css">-->
+  <link rel="stylesheet" href="{% static '/css/index.css' %}">
+
 </head>
 <body>
 <noscript>
-  <strong>We're sorry but mytinplate doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+  <strong>We're sorry but zero doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
 </noscript>
 <div class="home g-flex-column">
   <header class="g-flex-row fixed">
     <div class="g-head">
       <div class="logo"></div>
       <nav class="m-nav">
-        <a href="" class="m-nav-item active">首页</a>
-        <a href="#product" class="m-nav-item">产品中心</a>
-        <a href="#news" class="m-nav-item">行业资讯</a>
-        <a href="#about" rel="external nofollow" class="m-nav-item">关于我们</a>
-        <a href="#search" class="m-nav-item">搜索</a>
+        <a href="/" class="m-nav-item active">首页</a>
+        <a href="/list.html" class="m-nav-item">产品中心</a>
+        <a href="" class="m-nav-item">行业资讯</a>
+        <a href="" rel="external nofollow" class="m-nav-item">关于我们</a>
+        <a href="" class="m-nav-item">搜索</a>
       </nav>
     </div>
   </header>
   <div class="block" style="height: 70px;"></div>
-  <div class="m-goods-detail g-flex-row">
+  <div class="m-product-main g-flex-row">
     <div class="goods-img">
-          {% if 'c' in goodsInfo.spec or "C" in goodsInfo.spec %}
-              <img src="{% static '/img/goods1.jpg' %}">
-              {% else %}
-              <img src="{% static '/img/goods2.jpg' %}">
-          {% endif %}
+      {% if 'c' in goodsInfo.spec or "C" in goodsInfo.spec %}
+      <img src="{% static '/img/goods1.jpg' %}">
+      {% else %}
+      <img src="{% static '/img/goods2.jpg' %}">
+      {% endif %}
     </div>
     <div class="goods-info">
       <p>
@@ -48,7 +47,7 @@
         </li>
         <li class="product-property">
           <span class="product-property-type">重量</span>
-          <span class="product-property-cont">{{goodsInfo.balanceWeight}}</span>
+          <span class="product-property-cont">{{goodsInfo.balanceWeight}}吨</span>
         </li>
         <li class="product-property">
           <span class="product-property-type">仓储费</span>
@@ -58,15 +57,88 @@
           <span class="product-property-type">出库费</span>
           <span class="product-property-cont">以供应商与仓库约定为准</span>
         </li>
+        <li class="product-property">
+          <span class="product-property-type">有效期至</span>
+          <span class="product-property-cont">{{goodsInfo.businessTimes}}</span>
+        </li>
       </ul>
-      <p>规格：{{goodsInfo.specComment}}</p>
-      <p>钢厂资源号：{{goodsInfo.factoryResCode}}</p>
-      <p>出厂日期：{{goodsInfo.manufactureDate}}</p>
-      <p>存放地：{{goodsInfo.storeCityName}}</p>
-      <p>技术标准：{{goodsInfo.techStandard}}</p>
-      <p>质量等级：{{goodsInfo.qualityGradeName}}</p>
     </div>
   </div>
+  <div class="m-product-detail">
+    <div class="m-product-tabs">
+      <div class="tab-bar">
+        <div class="item active">详细信息</div>
+        <div class="item">仓库信息</div>
+      </div>
+      <div class="tab-content active">
+        <ul class="m-detail">
+          <li class="product-property">
+            <span class="product-property-type">出厂日期</span>
+            <span class="product-property-cont">{{goodsInfo.manufactureDate}}</span>
+          </li>
+          <li class="product-property">
+            <span class="product-property-type">规格详情</span>
+            <span class="product-property-cont">{{goodsInfo.specComment}}</span>
+          </li>
+          <li class="product-property">
+            <span class="product-property-type">捆包号</span>
+            <span class="product-property-cont">{{goodsInfo.packCode}}</span>
+          </li>
+          <li class="product-property">
+            <span class="product-property-type">钢厂资源号</span>
+            <span class="product-property-cont">{{goodsInfo.factoryResCode}}</span>
+          </li>
+          <li class="product-property">
+            <span class="product-property-type">产地</span>
+            <span class="product-property-cont">{{goodsInfo.manufactureName}}</span>
+          </li>
+          <li class="product-property">
+            <span class="product-property-type">存放地</span>
+            <span class="product-property-cont">{{goodsInfo.storeCityName}}</span>
+          </li>
+          <!---->
+          <li class="product-property">
+            <span class="product-property-type">库位</span>
+            <span class="product-property-cont">{{goodsInfo.location}}</span>
+          </li>
+          <!---->
+          <li class="product-property">
+            <span class="product-property-type">技术标准</span>
+            <span class="product-property-cont">{{goodsInfo.techStandard}}</span>
+          </li>
+          <li class="product-property">
+            <span class="product-property-type">质量等级</span>
+            <span class="product-property-cont">{{goodsInfo.qualityGradeName}}</span>
+          </li>
+          <li class="product-property">
+            <span class="product-property-type">特殊说明</span>
+            <span class="product-property-cont">{{goodsInfo.sepcialComments}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <footer data-v-2ad80814="">
+    <div data-v-2ad80814="" class="g-footer">
+      <div data-v-2ad80814="" class="title">联系我们</div>
+      <dl data-v-2ad80814="">
+        <span data-v-2ad80814="" class="u-icon u-icon-address"></span>
+        <dt data-v-2ad80814="" class="prop-type">地址</dt>
+        <dd data-v-2ad80814="" class="prop-cont">浙江省杭州市</dd>
+      </dl>
+      <dl data-v-2ad80814="">
+        <span data-v-2ad80814="" class="u-icon u-icon-tel"></span>
+        <dt data-v-2ad80814="" class="prop-type">电话</dt>
+        <dd data-v-2ad80814="" class="prop-cont">12345567788</dd>
+      </dl>
+      <dl data-v-2ad80814="">
+        <span data-v-2ad80814="" class="u-icon u-icon-email"></span>
+        <dt data-v-2ad80814="" class="name">邮箱</dt>
+        <dd data-v-2ad80814="">hello@email.com</dd>
+      </dl>
+    </div>
+    <div data-v-2ad80814="" class="m-footer-bottom">©MY TINPLATE, powered by xxx 证: 浙ICP备XXXXXX号-25法律声明</div>
+  </footer>
 </div>
 </body>
 </html>

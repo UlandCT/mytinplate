@@ -362,7 +362,7 @@ class Ouyeel(models.Model):
 
     def to_little_dic(self):
         goodsInfoes = {
-            'modiDate':self.modiDate,
+            'modiDate': self.modiDate,
             'balanceWeight': self.balanceWeight,
             'weight': self.weight,
             'publishDate': self.publishDate,

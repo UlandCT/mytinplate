@@ -52,13 +52,14 @@ def query_single_product(request):
             res = res.to_small_dic()
             # 生成详情页的静态页面
             from django.conf import settings
-            path = settings.NGX_DIR + "/detail/{}.html".format(res["packCode"])
+            path = settings.NGX_DIR + "detail/{}.html".format(res["packCode"])
+            print("生成静态页面", path)
             generate_detail(res, "detail.html", path)
             newSuccessCode = successCode.copy()
             newSuccessCode["result"] = res
             return HttpResponse(json.dumps(newSuccessCode))
         except Exception as e:
-            print(e)
+            print("static Html Error:", e)
             return HttpResponse(json.dumps(errCode))
 
 
@@ -89,7 +90,7 @@ def queryResultList(request):
             newSuccessCode = successCode.copy()
             newSuccessCode["resultList"] = resLst
             newSuccessCode["amount"] = amount
-            print(newSuccessCode)
+            # print(newSuccessCode)
             return HttpResponse(json.dumps(newSuccessCode))
         except Exception as e:
             print(e)
