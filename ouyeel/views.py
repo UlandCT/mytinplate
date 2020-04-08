@@ -231,11 +231,31 @@ def islogged_views(request):
 
 def test_views(request):
     try:
-        obj = Ouyeel.objects.get(packCode="121")
-        print(obj)
-    except Ouyeel.DoesNotExist as e:
+
+        # re_request_body = getattr(request, '_body', request.body)
+        # print("len(re_request_body):", len(re_request_body))
+        dic = {
+            "request.method": request.method,
+            "request.GET": request.GET,
+            "request.POST": request.POST,
+            # "request.body.length": len(re_request_body),
+        }
+        from django.conf import settings
+        file = request.FILES.get("file")
+        filename = dt.datetime.now().strftime("%Y%m%d%H%M%S") + file.name
+        file_content = file.chunks()
+        path = settings.BASE_DIR + "/ouyeel/config/{}".format(filename)
+        with open(path, "wb") as f:
+            for i in file_content:
+                f.write(i)
+
+        res = json.dumps(dic)
+        return HttpResponse(res)
+    # except Ouyeel.DoesNotExist as e:
+    except Exception as e:
+
         print(e)
-    return HttpResponse("ok!")
+        return HttpResponse("it's wrong method!")
 # 演示cookie操作
 # def cookie1_views(request):
 #     # resp = HttpResponse('添加cookie成功')
