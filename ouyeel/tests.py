@@ -19,10 +19,10 @@ def main():
     # param = {"param":[1,2,3,4]}
     # param = {"param":"this is param!"}
     param = urllib.parse.urlencode(param)
-    url = url + "?" +param
+    url = url + "?" + param
     # request = urllib.request.Request(url,headers=headers)
     # res = urllib.request.urlopen(request)
-    res = requests.get(url=url,headers=headers, timeout=10)
+    res = requests.get(url=url, headers=headers, timeout=10)
     print(res.text)
     res = json.loads(res.text)
     # resList = []
@@ -31,7 +31,8 @@ def main():
     #         resList.append(i)
     print(1111)
 
-def jsonstr():
+
+def json_str():
     def act1():
         for i in range(2):
             print("act1 is running at %s" % ctime())
@@ -57,10 +58,25 @@ def jsonstr():
     print("finished at %s" % ctime())
 
 
+
+
+
+
 if __name__ == "__main__":
     # main()
-    d = "20-03-11"
-    d = "20" + d
-
-
-    print(d)
+    dic = {
+        "a": 1,
+        "b": 3,
+    }
+    class As(object):
+        def __init__(self):
+            self.a = 1
+            self.b = 2
+    keys = dic.keys()
+    c = As()
+    print(hasattr(c, "a"))
+    for key in keys:
+        if hasattr(c, key):
+            if dic[key] != c.__getattribute__(key):
+                c.__setattr__(key, dic[key])
+                print(c.__getattribute__(key))

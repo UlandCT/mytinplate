@@ -23,9 +23,10 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$',TemplateView.as_view(template_name="index.html")),
+    url(r'^$',TemplateView.as_view()),
 
     url('^api/', include('ouyeel.urls')),
+    url('^mt/', include('mt.urls')),
     url(r'^assets/(?P<path>.*)$', static.serve,
         {'document_root': settings.STATIC_DIR},),
 

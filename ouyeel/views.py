@@ -49,7 +49,6 @@ def query_single_product(request):
             res = query_single_record(param)
             if not res:
                 return HttpResponse(json.dumps(nullCode))
-            res = res.to_small_dic()
             # 生成详情页的静态页面
             from django.conf import settings
             path = settings.NGX_DIR + "detail/{}.html".format(res["packCode"])
@@ -80,7 +79,6 @@ def queryResultList(request):
             if not res:
                 return HttpResponse(json.dumps(nullCode))
             resLst = []
-
             for i in res:
                 dic = i.to_small_dic()
                 # dic = json.dumps(dic)
@@ -149,9 +147,7 @@ def getDataToOyDb(request):
                     modiTime = dt.datetime.now().hour
                     i["businessTimes"] = timeStamp
                     i["modiDate"] = modiTime
-                    if "B" in i["qualityGrade"]:
-                        modiTime = dt.datetime.now().hour
-                        i["modiDate"] = modiTime
+
                     obj = Ouyeel(**i)
                     obj.save()
                     insertNum += 1
@@ -170,13 +166,11 @@ def getDataToOyDb(request):
         except Exception as e:
             pass
         print("Data saved!")
+        generate_home()
         return HttpResponse("data has been saved!")
     except Exception as e:
         print("InsertError", e, )
     return HttpResponse("you got 404!")
-
-
-
 
 
 # 退出登录函数
@@ -230,32 +224,13 @@ def islogged_views(request):
 
 
 def test_views(request):
-    try:
 
-        # re_request_body = getattr(request, '_body', request.body)
-        # print("len(re_request_body):", len(re_request_body))
-        dic = {
-            "request.method": request.method,
-            "request.GET": request.GET,
-            "request.POST": request.POST,
-            # "request.body.length": len(re_request_body),
-        }
-        from django.conf import settings
-        file = request.FILES.get("file")
-        filename = dt.datetime.now().strftime("%Y%m%d%H%M%S") + file.name
-        file_content = file.chunks()
-        path = settings.BASE_DIR + "/ouyeel/config/{}".format(filename)
-        with open(path, "wb") as f:
-            for i in file_content:
-                f.write(i)
+    res_code = generate_home()
 
-        res = json.dumps(dic)
-        return HttpResponse(res)
-    # except Ouyeel.DoesNotExist as e:
-    except Exception as e:
+    return HttpResponse(json.dumps(res_code))
 
-        print(e)
-        return HttpResponse("it's wrong method!")
+
+
 # 演示cookie操作
 # def cookie1_views(request):
 #     # resp = HttpResponse('添加cookie成功')
