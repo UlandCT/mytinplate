@@ -6,6 +6,7 @@ from ouyeel.models import Ouyeel
 from mt.models import Mt
 
 
+
 def generate_detail(res, temp, path):
     try:
         html = loader.get_template(temp)
@@ -14,6 +15,9 @@ def generate_detail(res, temp, path):
             f.write(html)
     except Exception as e:
         print("write Html Error:", e)
+
+
+
 
 
 def getCode(param):
@@ -165,10 +169,13 @@ def generate_home():
                     dic = i.to_small_dic()
                     # dic = json.dumps(dic)
                     resLst.append(dic)
-                newSuccessCode = successCode.copy()
-                newSuccessCode["resultList"] = resLst
-                newSuccessCode["amount"] = amount
-                static_res["sourceCode"+param["sourceCode"]] = newSuccessCode
+                if not res:
+                    static_res["sourceCode"+param["sourceCode"]] = nullCode
+                else:
+                    newSuccessCode = successCode.copy()
+                    newSuccessCode["resultList"] = resLst
+                    newSuccessCode["amount"] = amount
+                    static_res["sourceCode"+param["sourceCode"]] = newSuccessCode
             except Exception as e:
                 print("queryResult Error:", e)
 
