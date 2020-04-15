@@ -38,7 +38,6 @@ def read_mt_data(file_name, sheet):
                     'storeCityName': "浙江台州",
                     'weight': record[12],
                     'driver': record[4],
-                    'modiDate': dt.datetime.now().hour,
                     # 'location': location,
                     # 'manufactureName': self.manufactureName,
                     # 'techStandard': self.techStandard,
@@ -69,7 +68,6 @@ def update_mt_product(obj, i, updateNum):  # 麦铁库存数据更新修改
         modiTime = dt.datetime.now().hour
         obj.modiDate = modiTime
         obj.save()
-        obj.save()
         updateNum += 1
     return updateNum
 
@@ -95,6 +93,8 @@ def work_on_mt(file_name, log_dir):
                     print("updating data Error", e)
                     continue
                 obj = Mt(**i)
+                modiTime = dt.datetime.now().hour
+                obj.modiDate = modiTime
                 obj.save()
                 insertNum += 1
 

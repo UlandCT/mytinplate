@@ -6,6 +6,7 @@ from .views import *
 urlpatterns = [
     url(r'^index$', index_views),
     url(r'^querySingleProduct/$', query_single_product),
+    url(r'^aGradeProduct$', reportA_grade),
     url(r'^bGradeProduct$', reportB_grade),
     url(r'^queryResultList$', queryResultList,),
     url(r'^getDataToOyDb$', getDataToOyDb),
