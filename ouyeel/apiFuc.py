@@ -134,10 +134,11 @@ def updateProduct(obj, i, updateNum):
         obj.businessTimes = timeStamp
         time_update = 1
     modiTime = dt.datetime.now().hour
-    obj.modiDate = modiTime
-    if time_update == 1 or num > 0:
-        obj.save()
+    if time_update == 1:
+        obj.save()  # 刷新 bussiness time
     if num > 0:
+        obj.modiDate = modiTime
+        obj.save()
         updateNum += 1
     return updateNum
 

@@ -23,7 +23,7 @@ def read_mt_data(file_name, sheet):
                     'balanceWeight': record[18],
                     'balanceQuantity': record[6],
                     'quantity': record[10],
-                    'modiDate': date_strftime(float(record[2])),
+                    'businessTimes': date_strftime(float(record[2])),
                     'providerName': record[3],
                     'packCode': record[11],
                     'productName': "镀锡马口铁",
@@ -38,6 +38,7 @@ def read_mt_data(file_name, sheet):
                     'storeCityName': "浙江台州",
                     'weight': record[12],
                     'driver': record[4],
+                    'modiDate': dt.datetime.now().hour,
                     # 'location': location,
                     # 'manufactureName': self.manufactureName,
                     # 'techStandard': self.techStandard,
@@ -65,6 +66,9 @@ def update_mt_product(obj, i, updateNum):  # 麦铁库存数据更新修改
                 obj.__setattr__(key, i[key])
                 num += 1
     if num > 0:
+        modiTime = dt.datetime.now().hour
+        obj.modiDate = modiTime
+        obj.save()
         obj.save()
         updateNum += 1
     return updateNum

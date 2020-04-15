@@ -85,8 +85,8 @@ DATABASES = {
         'NAME': 'mytinplate',
         'PORT': '3306',
         'HOST': 'localhost',
-        'PASSWORD': '123456789',
-        'USER': 'mytinplate',
+        'PASSWORD': '123456',
+        'USER': 'root',
 
     }
 }

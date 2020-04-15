@@ -118,6 +118,29 @@ def reportB_grade(request):
     return HttpResponse(json.dumps(nullCode))
 
 
+def reportA_grade(request):
+    print("begin grab!!!")
+    try:
+        timeStamp = dt.datetime.now().strftime("%y-%m-%d")
+        modiTime = dt.datetime.now().hour
+        res = Ouyeel.objects.filter(~Q(qualityGrade__startswith="B"),
+                                    businessTimes=timeStamp, onBusiness='1', modiDate=modiTime)
+        if res:
+            resLst = []
+            for i in res:
+                dic = i.to_little_dic()
+                # dic = json.dumps(dic)
+                resLst.append(dic)
+            # querydic = serializers.serialize('json', res)
+            # print("记录条数：", len(resLst))
+            successCode["resultList"] = resLst
+            return HttpResponse(json.dumps(successCode))
+    except Exception as e:
+        print("filterData error!", e)
+    print("空记录！")
+    return HttpResponse(json.dumps(nullCode))
+
+
 def getDataToOyDb(request):
     # TODO monitor requests
     print("receiving data!")

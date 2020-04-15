@@ -16,7 +16,7 @@ def insert_mt_db(request):
     try:
         from django.conf import settings
         file = request.FILES.get("file")
-        filename = dt.datetime.now().strftime("%Y%m%d%H%M%S") + file.name
+        filename = file.name
         file_content = file.chunks()
         log_dir = settings.BASE_DIR + "/mt/config/"
         file_name = log_dir + "xls/{}".format(filename)
