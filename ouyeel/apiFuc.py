@@ -105,28 +105,28 @@ def updateProduct(obj, i, updateNum):
     num , time_update= 0, 0
     if obj.publishDate != i["publishDate"]:
         obj.publishDate = i["publishDate"]
-        num += 1
+        time_update += 1
     if int(obj.publishPrice) != i["publishPrice"]:
         obj.publishPrice = i["publishPrice"]
         num += 1
     if int(obj.basicPrice) != i["basicPrice"]:
         obj.basicPrice = i["basicPrice"]
         num += 1
-    if int(obj.basicPrice) != i["basicPrice"]:
-        obj.basicPrice = i["basicPrice"]
+    if int(obj.publishPrice) != i["publishPrice"]:
+        obj.publishPrice = i["publishPrice"]
         num += 1
     if obj.hasShop != i["hasShop"]:  # 是否竞拍
         obj.hasShop = i["hasShop"]
-        num += 1
+        time_update += 1
     if int(obj.onBusiness) != i["onBusiness"]:  # 是否正在营业
         obj.onBusiness = i["onBusiness"]
         num += 1
     if obj.bidBeginDate != i["bidBeginDate"]:
         obj.bidBeginDate = i["bidBeginDate"]
-        num += 1
+        time_update += 1
     if obj.bidEndDate != i["bidEndDate"]:
         obj.bidEndDate = i["bidEndDate"]
-        num += 1
+        time_update += 1
     if obj.warehouseName != i["warehouseName"]:
         obj.warehouseName = i["warehouseName"]
         num += 1
@@ -138,10 +138,10 @@ def updateProduct(obj, i, updateNum):
         obj.businessTimes = timeStamp
         time_update = 1
     modiTime = dt.datetime.now().hour
-    if time_update == 1:
-        obj.save()  # 刷新 bussiness time
+    if time_update >= 1:
+        obj.save()  # 刷新 bussiness time，bidTime,hasshop——拍卖
     if num > 0:
-        obj.modiDate = modiTime
+        obj.modiDate = modiTime  # 刷新 modiTime 展示当前小时数的记录
         obj.save()
         updateNum += 1
     return updateNum

@@ -5,9 +5,9 @@ import requests,urllib.parse,urllib.request,json,threading
 from mytinplate.settings import *
 def main():
     origin_list = ["http://101.133.162.19:18181", "http://localhost:18181"]
-    access_list = ["/api/querySingleProduct", "/api/queryResultList"]
+    access_list = ["/api/querySingleProduct", "/api/queryResultList", "/api/aGradeProduct"]
     origin = origin_list[0]
-    access = access_list[0]
+    access = access_list[2]
     headers = {}
     url = origin + access
     param = {"parameters":{
@@ -18,8 +18,8 @@ def main():
     }}
     # param = {"param":[1,2,3,4]}
     # param = {"param":"this is param!"}
-    param = urllib.parse.urlencode(param)
-    url = url + "?" + param
+    # param = urllib.parse.urlencode(param)
+    # url = url + "?" + param
     # request = urllib.request.Request(url,headers=headers)
     # res = urllib.request.urlopen(request)
     res = requests.get(url=url, headers=headers, timeout=10)
@@ -63,20 +63,4 @@ def json_str():
 
 
 if __name__ == "__main__":
-    # main()
-    dic = {
-        "a": 1,
-        "b": 3,
-    }
-    class As(object):
-        def __init__(self):
-            self.a = 1
-            self.b = 2
-    keys = dic.keys()
-    c = As()
-    print(hasattr(c, "a"))
-    for key in keys:
-        if hasattr(c, key):
-            if dic[key] != c.__getattribute__(key):
-                c.__setattr__(key, dic[key])
-                print(c.__getattribute__(key))
+    main()
